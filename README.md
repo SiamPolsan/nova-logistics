@@ -2,7 +2,7 @@
 
 Nova Logistics is a planned multi-tenant SaaS for logistics companies in Thailand. Phase 1 serves sub-contractors that supply riders (2W) and drivers (4W) to retailers: rider and driver registration and records, documents with expiry alerts, vehicles (insurance, equipment, odometer, photos, inspection checklists, who drives what, owned vehicles) and fleet overview — worked like a spreadsheet, with Excel import/export, bulk edit, a bucket-style document browser and ZIP upload, and tenant-defined fields.
 
-**Planning baseline: 28 October 2026.** This repository holds planning documents and the local service definition only. There is no backend, web app, API, migration, CI or deployment yet. Reference companies: TTP (Thaitaweeporn: Big C, 2W and 4W) and SWP (Siwaporn Express: ALL Now, 2W).
+**Planning baseline: 28 October 2026.** This repository holds planning documents and the local service definition only. There is no backend, web app, API, migration, CI or deployment yet. Reference companies: TTP (Thaitaweeporn: Big C, 2W and 4W) and SWP (Siwaporn Express: ALL Now, 2W), internal pilot tenants (D-15).
 
 ## Direction
 

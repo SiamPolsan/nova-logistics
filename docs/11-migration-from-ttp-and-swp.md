@@ -1,6 +1,6 @@
 # Migration from TTP and SWP
 
-**Status: proposed, 28 October 2026** (P-11, Q-02, Q-03, Q-18). TTP and SWP become the first two tenants (EPL possibly a third, Q-03). Migration runs through the same import engine customers use, so it also proves MVP-19 and MVP-10.
+**Status: proposed, 28 October 2026** (P-11, Q-02, Q-03, Q-18). TTP, SWP and EPL become separate internal tenants for the pilot; they are not sales targets (D-15). TTP's 4W system stays out of scope until Q-02 is answered. Migration runs through the same import engine customers use, so it also proves MVP-19 and MVP-10.
 
 ## Sources
 

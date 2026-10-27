@@ -17,7 +17,7 @@
 | fleet | service reminder, maintenance record | Light maintenance | rule (km or months), due; date, odometer, vendor, cost, invoice file |
 | documents | document type | Tenant catalogue | code, names, subject, has expiry, default validity, required rule, reminder offsets, blocking, review required |
 | documents | document, document version | A document and its file versions | subject type and ID, type, number, issue date, expiry date, status, version no, reviewer, reason |
-| equipment | equipment item, equipment issue | Catalogue and issue/return | item, serial, holder (driver or vehicle), issued, returned, condition, deposit (minor units) |
+| equipment | equipment item, equipment issue | Catalogue and issue/return checklist | item, serial, holder (driver or vehicle), issued, returned, condition at issue and return (deposits and stock later, D-18) |
 | inspections | inspection template, inspection, inspection item result, defect | Checklists and follow-up | template version and items; result, photos, GPS, signature; defect severity, status, owner, due |
 | files | file object | Metadata of stored objects | key, original name, MIME, size, SHA-256, uploader, capture time, GPS, retention class |
 | customization | custom field definition | UDA schema | see [07](07-tenant-customization-uda.md) |
@@ -65,7 +65,7 @@ The driver's primary key is a generated ID, never the citizen ID (SWP's design b
 | `photo` | Photograph | Driver | No | Required | Required | No |
 | `training_cert` | Training certificate | Driver | Optional | Optional | Optional | No |
 
-Every row is a seed the tenant can change; customers can add their own required documents (e.g. a site-access card).
+Every row is a seed: a tenant switches off any type it does not use, decides what is required per vehicle class and customer, and adds its own (e.g. a site-access card) (D-17).
 
 ## Lifecycles
 

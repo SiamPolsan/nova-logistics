@@ -28,9 +28,16 @@
 - Bulk endpoints mirror the import engine (dry run, commit, status).
 - Machine credentials never inherit a human role; bank-account and criminal-record writes are not exposed (lesson from TTP's agent gateway).
 
-## Accounting and ERP (Phase 3)
+## Accounting and ERP (later phase, D-25)
 
-Nova Logistics never keeps a general ledger. It exports or posts through adapters on events and scheduled jobs:
+Nova Logistics never keeps a general ledger. Each tenant chooses and configures its own accounting link (D-25). Proposed model (P-21, option 1): **connectors**, not tenant-uploaded code.
+
+- A connector is a built-in, versioned adapter for one target system, maintained by the product team.
+- A tenant switches a connector on and configures it: credentials (kept in the secret store, never shown again), mapping of its chart of accounts, cost centres, tax codes and UDA tags, schedule, and which events post.
+- Systems without a connector use tenant-defined export templates (CSV/xlsx), the public API and webhooks.
+- Tenant code never runs inside the backend; an isolated extension runtime is a possible later step, as in nova-sg-all's customization design.
+
+First connectors would be chosen from what pilot tenants use (Q-17 was skipped):
 
 | Target | Typical customer | First integration |
 | --- | --- | --- |

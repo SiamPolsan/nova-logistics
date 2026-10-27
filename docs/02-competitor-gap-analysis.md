@@ -91,7 +91,7 @@ Columns: what TTP and SWP do today ([research](research/2026-10-28-reference-sys
 1. **Thai rider compliance out of the box:** the Thai document set, BE dates, LINE alerts and foreign-worker identity on day one.
 2. **Spreadsheet-native:** paste from Excel, import with undo, ZIP in and out; an XS company is live in a day.
 3. **Person and vehicle together:** owner-driver vehicles, assignments and inspections on the same record.
-4. **Built for sub-contractors:** customer and site on every driver; compliance by hirer; later a hirer view (P-16).
+4. **Built for sub-contractors:** customer and site on every driver; compliance by hirer; exports in each hirer's own import format (D-17).
 5. **Priced in THB per active driver**, unlimited office users, free tier for XS.
 
 ## Evidence to collect in pilots

@@ -1,6 +1,6 @@
 # Nova Logistics Product and MVP
 
-**Planning baseline: 28 October 2026 (D-01 to D-08).** Nova Logistics is a multi-tenant SaaS for logistics companies in Thailand, first for sub-contractors that supply riders (2W) and drivers (4W) to retailers. Phase 1 replaces the spreadsheets and LINE groups such companies use to keep riders, their documents and their vehicles in order. Reference companies: TTP (Big C, 2W and 4W) and SWP (ALL Now, 2W) (D-13).
+**Planning baseline: 28 October 2026 (D-01 to D-08).** Nova Logistics is a multi-tenant SaaS for logistics companies in Thailand, first for sub-contractors that supply riders (2W) and drivers (4W) to retailers. Phase 1 replaces the spreadsheets and LINE groups such companies use to keep riders, their documents and their vehicles in order. Reference companies: TTP (Big C, 2W and 4W) and SWP (ALL Now, 2W) (D-13); with EPL they are separate internal tenants for the pilot, not sales targets (D-15). Size for 1,000+ driver records per tenant, including inactive and resigned (D-16).
 
 ## Who it is for
 
@@ -28,7 +28,7 @@ Phase 1 serves the **sub-contract mode**: a company supplies riders or drivers, 
 | MVP-02 | Customers and sites | Hirers (Big C, ALL Now) and their stores or DCs as master data; a driver's primary customer site |
 | MVP-03 | Driver records | Standard fields ([data model](10-data-model.md)) plus UDA; lifecycle Applicant → Onboarding → Active ⇄ Suspended → Resigned or Terminated; blacklist flag; duplicate check on citizen ID, passport/work permit and phone; rehire shows history; profile tabs |
 | MVP-04 | Driver self-service | Sign in by LINE Login or phone OTP; view profile; upload and renew documents; run inspections with photos; see warnings |
-| MVP-05 | Document types | Tenant catalogue seeded with the Thai defaults; per type: subject, expiry, default validity, required for which class or customer, review required, blocking |
+| MVP-05 | Document types | Tenant catalogue seeded with the Thai defaults; per type: subject, expiry, default validity, required for which class or customer, review required, blocking. A tenant switches off any default type it does not use and decides what is required (D-17) |
 | MVP-06 | Documents | Versioned upload (a renewal supersedes and keeps history); review queue pending → approved/rejected with reason; optional AI extraction of number and expiry (P-08) |
 | MVP-07 | Expiry engine and alerts | Daily scan; thresholds per type (default 60/30/15/7/3 days, P-13); in-app, email and LINE OA; manager digest; escalation; optional "not compliant" flag when a blocking document expires (P-14) |
 | MVP-08 | Compliance | Driver × required document matrix, % complete, by branch and customer, exportable |
@@ -37,21 +37,21 @@ Phase 1 serves the **sub-contract mode**: a company supplies riders or drivers, 
 | MVP-11 | Vehicles | Vehicle master, class (2W, EV 2W, 3W, 4W pickup, van, 6W, 10W, trailer), ownership (company, driver-owned, leased/rented, financed), CMI, voluntary insurance and tax |
 | MVP-12 | Assignments | Who drove which vehicle, from–to, start/end odometer, primary/pool/temporary |
 | MVP-13 | Odometer | Append-only readings from manual, inspection or import, with photo and anomaly flags |
-| MVP-14 | Equipment | Catalogue; issue/return to driver or vehicle with serial, condition and deposit amount (recorded, not accounted) |
+| MVP-14 | Equipment | Catalogue; issue and return to a driver or vehicle as a checklist (e.g. at joining or vehicle handover) with serial and condition; deposits and company-wide stock in a later phase (D-18) |
 | MVP-15 | Photos and inspections | Standard photo angles per class; checklist templates per class (TTP's 20-item 2W and 30-item 4W lists as defaults: lights and electrical, tyres, brakes, fluids, safety kit, cargo); critical failure → vehicle out of service and a defect |
 | MVP-16 | Service reminders | By date or odometer; light maintenance log with cost and invoice file |
 | MVP-17 | Fleet overview | Dashboard and exportable reports: compliance, expiry calendar, assignments, insurance register, equipment register, inspection results |
 | MVP-18 | Grid | Spreadsheet-grade grid on every list ([ADR-0007](adr/0007-spreadsheet-grade-bulk-data.md)) |
-| MVP-19 | Import/export | xlsx/csv templates incl. UDA columns, saved mappings, Thai/BE dates, dry run, upsert, async with progress, error file, undo batch; export any view |
+| MVP-19 | Import/export | xlsx/csv templates incl. UDA columns, saved mappings, Thai/BE dates, dry run, upsert, async with progress, error file, undo batch; export any view; tenant-defined export templates in each hirer's own import format (D-17) |
 | MVP-20 | UDA | Tenant fields on driver, vehicle, document (per type), equipment, inspection, customer site ([07](07-tenant-customization-uda.md)) |
 | MVP-21 | Field settings | Rename, hide or require standard fields per tenant |
-| MVP-22 | Localisation | Thai and English UI; BE or CE date display per user |
+| MVP-22 | Localisation | Thai and English first, built on i18n/l10n so more languages can be added without code changes (D-22); BE or CE date display per user |
 | MVP-23 | Subscriptions | Plans and monthly usage count of active drivers (P-09, P-10); invoices issued outside the system |
 | MVP-24 | Rider and driver registration | Applicants self-register from a public link, QR code or LINE per tenant and branch, tagged with source or campaign: name, phone (OTP-verified), citizen ID or passport, vehicle class, own vehicle yes/no, area, privacy-notice consent; each lands as an Applicant. The office reviews in the grid (duplicates, blacklist), requests documents through the PWA, moves to Onboarding or rejects with a reason. Bulk registration by import follows the same rules (D-14) |
 
 ### Not in Phase 1
 
-Check-in/out, shift schedules and leave (Phase 2); customer portal for hirers (P-16); public API (Phase 2, internal API is designed for it); GPS tracking, fuel, routes, orders, OMS, WMS (Phase 3); payroll, billing and accounting (integrations later, D-08); recruiting campaigns, lead rotation and kanban beyond registration, and training (Q-10, Q-11).
+Check-in/out, shift schedules and leave requests (Phase 2); public API (Phase 2, internal API is designed for it); GPS tracking, fuel, routes, orders, OMS, WMS (Phase 3). Later and unscheduled: recruiting beyond registration on global applicant-tracking practice (D-20), training (D-21), rider pay and leave calculation (D-24), company-wide stock (D-18), accounting connectors (D-25). There is no hirer portal: hirers receive exports in their own format (D-17).
 
 ## Key journeys
 

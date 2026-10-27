@@ -27,6 +27,13 @@ Every business rule lives here with a code, the rule in plain words, an example,
 | BR-DOC-05 | When a blocking document expires, the driver or vehicle is flagged Not compliant; if the tenant enabled auto-suspend, the status changes to Suspended or Out of service | Expired CMI puts the vehicle Out of service where auto-suspend is on | proposed | P-14, TTP design doc |
 | BR-DOC-06 | A driver may upload or renew only their own documents; office roles review | The PWA shows only the signed-in driver's documents | proposed | SWP owner-or-employee rule |
 | BR-DOC-07 | A rejection needs a reason the driver can read | "Photo blurred, please retake" | proposed | TTP review queue |
+| BR-DOC-08 | A tenant decides which document types it uses and which are required per vehicle class and customer; a switched-off type is hidden and never counted in compliance | A company that does not collect medical certificates switches that type off and its 4W drivers become compliant without it | confirmed 2026-10-28 | D-17 |
+
+## Equipment (BR-EQP)
+
+| Code | Rule | Example | Status | Source |
+| --- | --- | --- | --- | --- |
+| BR-EQP-01 | Equipment is issued and returned as a checklist of catalogue items, each ticked with serial (if any) and condition; no deposit or stock count in Phase 1 | At joining, the office ticks box, helmet and vest as issued; at resignation, ticks what came back and notes a missing helmet | confirmed 2026-10-28 | D-18 |
 
 ## Vehicles (BR-VEH)
 
