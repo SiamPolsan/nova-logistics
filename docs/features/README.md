@@ -25,3 +25,4 @@ One file per feature: `docs/features/<module>/<feature>.md`, copied from [the te
 | reports | `reports/fleet-overview.md` | MVP-17 | S9 |
 | platform | `platform/localisation-th-en.md` | MVP-22 | S1–S9 |
 | subscriptions | `subscriptions/plans-and-usage.md` | MVP-23 | S9 |
+| integrations | `integrations/pilot-read-api.md` | MVP-25 | S9 |

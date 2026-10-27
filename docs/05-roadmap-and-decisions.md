@@ -6,11 +6,11 @@ Phase 1 proves that a sub-contractor can keep every rider, document and vehicle 
 
 | Phase | Window (proposed) | Scope | Exit evidence |
 | --- | --- | --- | --- |
-| 0: Discovery | 2–13 Nov 2026 | Answers to the open `Q-*`; sample sheets and document scans from TTP and SWP; P-01, P-02, P-07 decided; screens drawn for the first journeys | Owner signs off scope and the first screens |
-| 1: Core MVP | 16 Nov 2026 – 26 Mar 2027 | MVP-01 to MVP-24 ([01](01-product-and-mvp.md)) | All Phase 1 `AC-*` verified locally and on UAT |
+| 0: Discovery | 2–13 Nov 2026 | Answers to the open `Q-*`; sample sheets and document scans from TTP and SWP; P-01, P-07, P-12, P-18 decided; NIPA accounts and UAT resources requested (D-28); screens drawn for the first journeys | Owner signs off scope and the first screens |
+| 1: Core MVP | 16 Nov 2026 – 26 Mar 2027 | MVP-01 to MVP-25 ([01](01-product-and-mvp.md)) | All Phase 1 `AC-*` verified locally and on UAT |
 | 1: Pilot | 29 Mar – 30 Apr 2027 | TTP and SWP migrated and running in parallel with their current systems | AC-P-01 to AC-P-07 |
 | 1: GA | May 2027 | Self-serve sign-up open; first external XS/S tenants | 5 paying external tenants |
-| 2: Operations | Jun – Sep 2027 | Check-in/out with GPS and selfie, shift schedules, leave requests and cover (patterns from nova-sg-all), public API v1 and webhooks, Google Sheets connector | A pilot tenant runs a month of shifts and attendance in the product |
+| 2: Operations | Jun – Sep 2027 | Check-in/out with GPS and selfie, shift schedules, leave requests and cover (patterns from nova-sg-all), public API v1 with writes and webhooks extending the Phase 1 pilot read API, Google Sheets connector | A pilot tenant runs a month of shifts and attendance in the product |
 | 3: Logistics | Q4 2027 – 2028 | Fuel logs and fuel cards, maintenance depth, telematics port (Cartrack, DTC), route optimisation, orders for sub-contract and owned-logistics modes, accounting/ERP connectors (P-21); OMS and WMS after | Trips and fuel for one owned-fleet tenant |
 | Later | Not scheduled | Recruiting on global applicant-tracking practice (D-20), training (D-21), rider pay and leave calculation (D-24, P-20), company-wide stock (D-18) | The owner sets the order |
 
@@ -18,7 +18,7 @@ Phase 1 proves that a sub-contractor can keep every rider, document and vehicle 
 
 | Sprint | Dates | Deliverables | MVP |
 | --- | --- | --- | --- |
-| S0 | 2–13 Nov 2026 | Discovery, decisions P-01/P-02/P-07, screen drawings, repository scaffold, local stack, CI skeleton | — |
+| S0 | 2–13 Nov 2026 | Discovery, decisions P-01/P-07/P-12/P-18, NIPA UAT resources requested, screen drawings, repository scaffold, local stack, CI skeleton | — |
 | S1 | 16–27 Nov | Tenancy, sign-up, memberships, roles, branch scope, audit, job queue/outbox, S3 and Redis adapters, i18n shell, driver sign-in spike (PWA, LINE) | 01, 04, 22 |
 | S2 | 30 Nov – 11 Dec | Settings, Customization (UDA) and field settings, customers and sites, grid component spike and choice | 02, 20, 21, 18 |
 | S3 | 14–25 Dec | Driver records, lifecycle, duplicates, profile tabs, self-registration link/QR and review, grid inline and bulk edit, saved views | 03, 24, 18 |
@@ -28,7 +28,7 @@ Phase 1 proves that a sub-contractor can keep every rider, document and vehicle 
 | S6 | 1–12 Feb | Expiry engine, alerts (in-app, email, LINE OA), digest; document browser; ZIP upload and download | 07, 09, 10 |
 | S7 | 15–26 Feb | Vehicles, ownership, insurance and tax, assignments, odometer, equipment issue/return checklist | 11, 12, 13, 14 |
 | S8 | 1–12 Mar | Inspection templates, photo capture in the PWA, defects, service reminders | 15, 16 |
-| S9 | 15–26 Mar | Fleet overview and reports, subscriptions, performance and security review, restore rehearsal | 17, 23 |
+| S9 | 15–26 Mar | Fleet overview and reports, subscriptions, pilot read API with API keys (D-29), performance and security review, restore rehearsal on NIPA | 17, 23, 25 |
 | S10 | 29 Mar – 9 Apr | TTP and SWP migration, UAT, training | Pilot |
 | — | 12–16 Apr | Songkran | — |
 | S11 | 19–30 Apr | Parallel run, fixes, go/no-go | Pilot |
@@ -73,6 +73,10 @@ Assumed team: owner/PM, 2 Go engineers, 2 Next.js engineers, 1 QA, a part-time d
 | D-23 | The product name is Nova Logistics | 2026-10-28, owner answer to Q-15 |
 | D-24 | Rider pay calculation and leave calculation are a later phase; pay must handle rates that vary by customer, site, period, volume and rider (P-20) | 2026-10-28, owner remark on Q-16 |
 | D-25 | Accounting integration is deferred and must be configurable per tenant (P-21) | 2026-10-28, owner answer to Q-17 |
+| D-26 | Every vehicle ownership type is supported: rider-owned, company-owned and lent, rented from a leasing company, and rent-to-own (instalment deductions arrive with pay, P-20) | 2026-10-28, owner answer to Q-06 ("it can be all") |
+| D-27 | Each tenant sets its own inspection schedule per vehicle class and ownership; the product ships defaults the tenant can change | 2026-10-28, owner answer to Q-08 (option 4) |
+| D-28 | Hosting is NIPA Cloud in Thailand: k3s for API, worker and web; NIPA managed MySQL 8.4; NIPA S3; Redis on k3s unless NIPA offers it managed. Answers P-02 | 2026-10-28, owner answer to Q-14 |
+| D-29 | During the pilot, TTP's and SWP's payroll systems read drivers, vehicles and assignments from a Nova Logistics API, and exports stay available. A read-only pilot API with API keys therefore moves into Phase 1 (MVP-25); the full public API stays in Phase 2 | 2026-10-28, owner answer to Q-18 |
 
 ## Decisions still needed
 
@@ -81,7 +85,7 @@ Working proposals let independent work continue; nothing that depends on them be
 | ID | Decision | Options | Working proposal | Needed before |
 | --- | --- | --- | --- | --- |
 | P-01 | Code relationship with nova-sg-all | 1. Port patterns, no shared code. 2. Shared Go platform module. 3. Build inside nova-sg-all | 1 now; review after GA (ADR-0002) | S1 |
-| P-02 | Cloud and runtime | 1. GCP (where TTP/SWP run, Cloud Run + Cloud SQL + GCS S3 interop). 2. NIPA k3s + NIPA MySQL/S3 (as nova-sg-all). 3. AWS | Decide on hosting cost and any data-residency demand from Q-14; keep S3-compatible to stay portable | S2 (UAT by S4) |
+| P-02 | Cloud and runtime | — | **Answered by D-28:** NIPA Cloud in Thailand | — |
 | P-03 | Tenancy enforcement | 1. Shared schema + app checks + negative tests. 2. Add DB views per tenant role | 1 (ADR-0003) | S1 |
 | P-04 | Driver app | 1. Next.js PWA. 2. Flutter app | 1 for Phase 1; decide native before Phase 2 (ADR-0008) | S1 spike |
 | P-05 | Driver sign-in | 1. LINE Login. 2. SMS OTP. 3. Both | 3: LINE first, SMS fallback | S1 |
@@ -96,7 +100,7 @@ Working proposals let independent work continue; nothing that depends on them be
 | P-14 | Effect of an expired blocking document | 1. Flag "not compliant" only. 2. Auto-suspend the driver or vehicle | 1 by default; 2 as a tenant option | S6 |
 | P-15 | Retention per document type and after a driver leaves | Legal input | Keep 1 year after the engagement ends, then delete files; keep audit records | S6 |
 | P-16 | Hirer view | — | **Answered by D-17:** no hirer portal; hirers receive exports in their own format | — |
-| P-17 | Key management for field encryption | Cloud KMS of P-02; local development key | Follows P-02 | S1 |
+| P-17 | Key management for field encryption | 1. NIPA's key service, if offered. 2. Envelope encryption with a master key kept as a k3s Secret outside Git. 3. An external KMS | Check 1 in S1, else 2 (D-28); local uses a development key | S1 |
 | P-18 | Design system | 1. Own tokens and components drawn first (as nova-sg-all). 2. Off-the-shelf kit (shadcn/ui) themed | 2 with own tokens; draw key screens before coding | S0 |
 | P-19 | Malware scanning of uploads | 1. ClamAV in the worker. 2. Cloud provider scanning. 3. None in Phase 1 | 1 | S6 |
 | P-20 | How rider pay handles varying rates (later phase, D-24) | 1. Rate-card engine: effective-dated, approved rate cards scoped tenant → customer → site → rider, with tiers, bonus bands, daily guarantee floors, allowances and typed deductions as data. 2. Fixed pay types with per-tenant numbers. 3. Export work records to an outside payroll tool | 1 ([research note](research/2026-10-28-rider-pay-variation.md)) | Before the pay phase |
@@ -104,7 +108,7 @@ Working proposals let independent work continue; nothing that depends on them be
 
 ## Questions for the owner
 
-Answers given by the owner on 28 October 2026 are recorded as `D-*` rows above. Four questions were reworded the same day because the first wording was unclear.
+Answers given by the owner on 28 October 2026 are recorded as `D-*` rows above. Five questions were reworded the same day because the first wording was unclear; their answers followed as D-26 to D-29.
 
 | ID | Question | Why it matters | Status |
 | --- | --- | --- | --- |
@@ -113,23 +117,23 @@ Answers given by the owner on 28 October 2026 are recorded as `D-*` rows above. 
 | Q-03 | Are TTP, SWP and EPL separate tenants? | Tenancy and migration | Answered → D-15 |
 | Q-04 | How many records does each company have? | Sizing, performance targets | Answered → D-16 |
 | Q-05 | Which documents does each hirer require, how do they audit, do they want direct access? | Required rules; hirer view | Answered → D-17 |
-| Q-06 | **Reworded.** Who owns the vehicles your riders and drivers use, and roughly what share of each: (1) the rider's own vehicle, (2) a company vehicle lent to the rider, (3) rented from a leasing company, (4) rent-to-own, with instalments deducted from pay? | Which owner documents (power of attorney) and rental contracts to track; whether instalment deductions matter later | Open |
+| Q-06 | **Reworded.** Who owns the vehicles your riders and drivers use, and roughly what share of each: (1) the rider's own vehicle, (2) a company vehicle lent to the rider, (3) rented from a leasing company, (4) rent-to-own, with instalments deducted from pay? | Which owner documents (power of attorney) and rental contracts to track; whether instalment deductions matter later | Answered → D-26 |
 | Q-07 | Equipment: deposits and deductions now, or issue/return only? | Finance link | Answered → D-18 |
-| Q-08 | **Reworded.** How often should a rider do the vehicle checklist with photos: (1) every day before work, (2) weekly or monthly, (3) only when joining or when a vehicle changes hands, (4) each company sets its own schedule? Who looks at failed items? Working proposal: 4, default "at joining and monthly" for 2W and "daily" for company 4W | How many inspections the system sends and reviews | Open |
+| Q-08 | **Reworded.** How often should a rider do the vehicle checklist with photos: (1) every day before work, (2) weekly or monthly, (3) only when joining or when a vehicle changes hands, (4) each company sets its own schedule? Who looks at failed items? Working proposal: 4, default "at joining and monthly" for 2W and "daily" for company 4W | How many inspections the system sends and reviews | Answered → D-27 |
 | Q-09 | Are EV motorcycles or battery swaps in use? | Vehicle model | Answered → D-19 |
 | Q-10 | Recruiting beyond registration: which phase? | Scope | Answered → D-20 |
 | Q-11 | Training: which phase? | Scope | Answered → D-21 |
 | Q-12 | Team and budget: how many engineers, QA and design, and is a May 2027 GA the target? | Plan realism | Skipped; plan keeps its assumed team |
 | Q-13 | Languages? | i18n | Answered → D-22 |
-| Q-14 | **Reworded.** Where should Nova Logistics run: (1) Google Cloud, Singapore region, where TTP and SWP run today, (2) NIPA Cloud in Thailand, where nova-sg-all's UAT runs, (3) AWS, Bangkok region? Does any customer require data kept in Thailand? | Cost, operations playbook, PDPA transfer rules (P-02) | Open |
+| Q-14 | **Reworded.** Where should Nova Logistics run: (1) Google Cloud, Singapore region, where TTP and SWP run today, (2) NIPA Cloud in Thailand, where nova-sg-all's UAT runs, (3) AWS, Bangkok region? Does any customer require data kept in Thailand? | Cost, operations playbook, PDPA transfer rules (P-02) | Answered → D-28 |
 | Q-15 | Product name? | Branding | Answered → D-23 |
-| Q-16 | **Reworded.** What monthly price should a company pay for Nova Logistics itself, for example ฿20, ฿30 or ฿50 per active rider per month, free up to 10 riders? (The owner's note on varying rider pay is recorded as D-24 and P-20.) | Pricing (P-09) | Open |
+| Q-16 | **Reworded.** What monthly price should a company pay for Nova Logistics itself, for example ฿20, ฿30 or ฿50 per active rider per month, free up to 10 riders? (The owner's note on varying rider pay is recorded as D-24 and P-20.) | Pricing (P-09) | Skipped by the owner; needed before GA |
 | Q-17 | Which accounting systems do target customers use? | Accounting connectors | Skipped; integration made tenant-configurable → D-25, P-21 |
-| Q-18 | **Reworded.** During the pilot, TTP's and SWP's payroll still needs the rider list. Should it (1) receive a scheduled export from Nova Logistics and import it, (2) read it from Nova Logistics' API, or (3) TTP and SWP stay on their old systems until a pay module exists? Working proposal: 1 | Integration work in Phase 1 | Open |
+| Q-18 | **Reworded.** During the pilot, TTP's and SWP's payroll still needs the rider list. Should it (1) receive a scheduled export from Nova Logistics and import it, (2) read it from Nova Logistics' API, or (3) TTP and SWP stay on their old systems until a pay module exists? Working proposal: 1 | Integration work in Phase 1 | Answered → D-29 (option 2, plus exports) |
 
 ## Next discovery package
 
 1. Anonymised samples: one rider sheet from each company, one ZIP of 20 synthetic or masked document scans, the 2W and 4W checklists in use.
-2. Answers to the reworded Q-06, Q-08, Q-14, Q-16 and Q-18.
-3. Decisions P-01, P-02, P-07, P-12 and P-18.
+2. NIPA accounts and UAT resources for D-28; Q-16 (subscription price) before GA.
+3. Decisions P-01, P-07, P-12 and P-18.
 4. Drawings of the first journeys (onboarding by import, document renewal, vehicle handover) for owner review.

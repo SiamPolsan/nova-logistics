@@ -45,6 +45,7 @@ Every business rule lives here with a code, the rule in plain words, an example,
 | BR-VEH-04 | An odometer reading lower than the previous one, or higher by more than the daily limit, is kept but flagged for review | 25,000 then 24,800 km is flagged | proposed | brief |
 | BR-VEH-05 | A failed critical inspection item puts the vehicle Out of service and opens a defect; resolving the defect returns it to Active | Brake failure blocks the vehicle until repaired | proposed | TTP checklist rules |
 | BR-VEH-06 | A failed non-critical item opens a defect with a due date but leaves the vehicle Active | A cracked mirror is due for repair in 7 days | proposed | TTP checklist rules |
+| BR-VEH-07 | Each tenant sets the inspection schedule per vehicle class and ownership; the driver is reminded when one is due, and an overdue inspection flags the vehicle | Rider-owned 2W: at joining and monthly; company 4W: daily before work | confirmed 2026-10-28 (tenant sets it); defaults proposed | D-27 |
 
 ## Imports and bulk edits (BR-IMP)
 
@@ -72,6 +73,13 @@ Every business rule lives here with a code, the rule in plain words, an example,
 | BR-UDA-02 | Making a field required later marks existing records incomplete instead of blocking them | 300 riders show "incomplete" until edited | proposed | ADR-0006 |
 | BR-UDA-03 | Core identity fields cannot be hidden or made optional | Citizen ID/passport and plate stay required | proposed | D-07 |
 
+## Integrations (BR-INT)
+
+| Code | Rule | Example | Status | Source |
+| --- | --- | --- | --- | --- |
+| BR-INT-01 | Pilot API keys are read-only, scoped per module and optionally per branch, shown once and stored hashed; protected fields need an explicit scope | A payroll key with `drivers:read` sees drivers without bank accounts unless `drivers:bank:read` is granted | proposed | D-29 |
+| BR-INT-02 | Every API call is audited with key, endpoint and result count; a key over its rate limit gets HTTP 429 | A sync loop gone wrong is throttled and visible in the audit log | proposed | D-29 |
+
 ## Figures
 
 | Figure | Default | Range | Set by | Source |
@@ -79,6 +87,8 @@ Every business rule lives here with a code, the rule in plain words, an example,
 | Alert thresholds (days before expiry) | 60, 30, 15, 7, 3 | 1–180, up to 6 values | Tenant, per document type | P-13 |
 | Manager digest time | 07:00 | any hour | Tenant | proposed |
 | Applicant expiry | 90 days | 7–365 days | Tenant | BR-DRV-09 |
+| Inspection schedule | Rider-owned 2W: at joining + monthly; company 4W: daily | Per vehicle class and ownership | Tenant | BR-VEH-07 |
+| API rate limit | 60 requests per minute per key | 10–600 | Platform, by tier | BR-INT-02 |
 | Odometer daily jump limit | 2W 400 km, 4W 1,000 km | 50–3,000 km | Tenant, per vehicle class | proposed |
 | Download link validity | 5 minutes | 1–5 minutes | Platform | ADR-0005 |
 | ZIP upload limits | 2 GB, 5,000 files, 50 MB per file | — | Platform | proposed |

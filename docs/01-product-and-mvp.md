@@ -34,11 +34,11 @@ Phase 1 serves the **sub-contract mode**: a company supplies riders or drivers, 
 | MVP-08 | Compliance | Driver × required document matrix, % complete, by branch and customer, exportable |
 | MVP-09 | Document browser | Bucket-style virtual folders by driver, vehicle, company and type; list/grid, preview, search, multi-select ZIP download, drag-and-drop upload |
 | MVP-10 | Bulk document upload | ZIP or many files; auto-match by file name or folder path; review tray for unmatched; metadata from an Excel sheet in the same job |
-| MVP-11 | Vehicles | Vehicle master, class (2W, EV 2W, 3W, 4W pickup, van, 6W, 10W, trailer), ownership (company, driver-owned, leased/rented, financed), CMI, voluntary insurance and tax |
+| MVP-11 | Vehicles | Vehicle master, class (2W, EV 2W, 3W, 4W pickup, van, 6W, 10W, trailer), ownership (company-owned, driver-owned, leased/rented, financed or rent-to-own; all supported, D-26), CMI, voluntary insurance and tax |
 | MVP-12 | Assignments | Who drove which vehicle, from–to, start/end odometer, primary/pool/temporary |
 | MVP-13 | Odometer | Append-only readings from manual, inspection or import, with photo and anomaly flags |
 | MVP-14 | Equipment | Catalogue; issue and return to a driver or vehicle as a checklist (e.g. at joining or vehicle handover) with serial and condition; deposits and company-wide stock in a later phase (D-18) |
-| MVP-15 | Photos and inspections | Standard photo angles per class; checklist templates per class (TTP's 20-item 2W and 30-item 4W lists as defaults: lights and electrical, tyres, brakes, fluids, safety kit, cargo); critical failure → vehicle out of service and a defect |
+| MVP-15 | Photos and inspections | Standard photo angles per class; checklist templates per class (TTP's 20-item 2W and 30-item 4W lists as defaults: lights and electrical, tyres, brakes, fluids, safety kit, cargo); critical failure → vehicle out of service and a defect; each tenant sets the inspection schedule per vehicle class and ownership (e.g. at joining, monthly, daily) and who reviews failures (D-27) |
 | MVP-16 | Service reminders | By date or odometer; light maintenance log with cost and invoice file |
 | MVP-17 | Fleet overview | Dashboard and exportable reports: compliance, expiry calendar, assignments, insurance register, equipment register, inspection results |
 | MVP-18 | Grid | Spreadsheet-grade grid on every list ([ADR-0007](adr/0007-spreadsheet-grade-bulk-data.md)) |
@@ -48,10 +48,11 @@ Phase 1 serves the **sub-contract mode**: a company supplies riders or drivers, 
 | MVP-22 | Localisation | Thai and English first, built on i18n/l10n so more languages can be added without code changes (D-22); BE or CE date display per user |
 | MVP-23 | Subscriptions | Plans and monthly usage count of active drivers (P-09, P-10); invoices issued outside the system |
 | MVP-24 | Rider and driver registration | Applicants self-register from a public link, QR code or LINE per tenant and branch, tagged with source or campaign: name, phone (OTP-verified), citizen ID or passport, vehicle class, own vehicle yes/no, area, privacy-notice consent; each lands as an Applicant. The office reviews in the grid (duplicates, blacklist), requests documents through the PWA, moves to Onboarding or rejects with a reason. Bulk registration by import follows the same rules (D-14) |
+| MVP-25 | Pilot read API | Read-only API with per-tenant API keys and scopes for drivers, vehicles, assignments, customer sites and document status, so payroll systems (TTP, SWP) read master data; incremental sync, rate-limited and audited; protected fields only with an explicit scope; exports stay available (D-29) |
 
 ### Not in Phase 1
 
-Check-in/out, shift schedules and leave requests (Phase 2); public API (Phase 2, internal API is designed for it); GPS tracking, fuel, routes, orders, OMS, WMS (Phase 3). Later and unscheduled: recruiting beyond registration on global applicant-tracking practice (D-20), training (D-21), rider pay and leave calculation (D-24), company-wide stock (D-18), accounting connectors (D-25). There is no hirer portal: hirers receive exports in their own format (D-17).
+Check-in/out, shift schedules and leave requests (Phase 2); the full public API with writes and webhooks (Phase 2; Phase 1 has the read-only pilot API, MVP-25); GPS tracking, fuel, routes, orders, OMS, WMS (Phase 3). Later and unscheduled: recruiting beyond registration on global applicant-tracking practice (D-20), training (D-21), rider pay and leave calculation (D-24), company-wide stock (D-18), accounting connectors (D-25). There is no hirer portal: hirers receive exports in their own format (D-17).
 
 ## Key journeys
 
@@ -72,3 +73,4 @@ Check-in/out, shift schedules and leave requests (Phase 2); public API (Phase 2,
 | AC-P-05 | A 500-file ZIP following the naming convention auto-matches at least 95% of files; the rest land in the review tray |
 | AC-P-06 | Import of 10,000 drivers completes in under 5 minutes; an export of 50,000 rows completes in under 2 minutes |
 | AC-P-07 | A driver completes a 6-photo inspection on a low-end Android phone opened from LINE |
+| AC-P-08 | TTP's and SWP's payroll systems read drivers, vehicles and assignments through the pilot API for a full pay period without re-keying |

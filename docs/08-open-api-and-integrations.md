@@ -9,6 +9,16 @@
 - Idempotency keys on create and bulk endpoints.
 - Transactional outbox with versioned domain events.
 
+## Pilot read API (Phase 1, D-29)
+
+TTP's and SWP's payroll systems read master data from Nova Logistics during the pilot; exports stay available as a fallback.
+
+- Versioned path `/integrations/v1`, read-only: drivers, vehicles, vehicle assignments, customer sites, document status (no files).
+- Per-tenant API keys created by an Owner or Admin, each with scopes (e.g. `drivers:read`, `vehicles:read`) and an optional branch scope; shown once, stored hashed, rotatable and revocable.
+- Protected fields (citizen ID, bank account) only with an explicit scope; criminal records and document images never.
+- Cursor pagination and `updated_since` for incremental sync; rate limit per key; every call audited.
+- The Phase 2 public API extends this contract with writes and webhooks instead of replacing it.
+
 ## Event catalogue (initial)
 
 | Event | Payload (IDs only, no personal data) |

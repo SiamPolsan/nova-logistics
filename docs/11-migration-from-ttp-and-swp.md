@@ -33,7 +33,7 @@
 3. **Dry run** on UAT; fix mappings until zero blocking errors.
 4. **Reconcile** counts per entity, per document type and per status against the source; spot-check 30 random riders per tenant with the operations team.
 5. **Cutover**: freeze edits in the old system for driver master data, final delta import, switch alerts to Nova Logistics, parallel run for 2 weeks (P-11).
-6. **Integration during the pilot** (Q-18): payroll and billing stay in the current systems and read driver and vehicle master data from Nova Logistics by export or API.
+6. **Integration during the pilot** (D-29): payroll and billing stay in the current systems and read drivers, vehicles and assignments from the Nova Logistics pilot API (MVP-25); exports remain available as a fallback.
 
 ## Risks
 

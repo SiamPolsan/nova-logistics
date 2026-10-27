@@ -1,14 +1,14 @@
 # Local and Cloud Environment Workflow
 
-**Status: local topology confirmed by the owner on 28 October 2026 (D-10); cloud open (P-02).** The local service file exists (`platform/compose.yaml`: MinIO and Redis). The backend and web app do not exist yet, so the `apps` profile is added with the scaffold.
+**Status: local topology confirmed by the owner on 28 October 2026 (D-10); cloud is NIPA Cloud in Thailand (D-28).** The local service file exists (`platform/compose.yaml`: MinIO and Redis). The backend and web app do not exist yet, so the `apps` profile is added with the scaffold.
 
 ## Topology
 
 | Environment | MySQL 8.4 | Object storage | Redis | Application |
 | --- | --- | --- | --- | --- |
 | Developer local | The developer's **existing host MySQL 8.4**, outside Docker | **MinIO in Docker**, private dev and test buckets | **Redis 7.4 in Docker** | API, worker and web on the host, later also as containers with the `apps` profile |
-| Cloud UAT | Managed MySQL 8.4 (provider P-02) | S3-compatible bucket, private | Managed Redis or a container | Same images as production |
-| Cloud production | Separate managed MySQL 8.4 | Separate private bucket | Separate Redis | Same versioned release |
+| Cloud UAT | NIPA managed MySQL 8.4 | NIPA S3, private UAT bucket | Redis on k3s (or NIPA managed, if offered) | Same images on k3s at NIPA |
+| Cloud production | Separate NIPA managed MySQL 8.4 | Separate private NIPA S3 bucket | Separate Redis | Same versioned release on k3s at NIPA |
 
 Compose never starts MySQL. Stopping the stack or removing its volumes resets MinIO and Redis only, never the database.
 
@@ -55,6 +55,6 @@ Compose never starts MySQL. Stopping the stack or removing its volumes resets Mi
 
 Each process gets only the variables it reads; the migrator's password never reaches the API or the worker.
 
-## Cloud release loop (when P-02 is decided)
+## Cloud release loop (NIPA, D-28)
 
-Verify separate UAT and production databases, buckets and Redis; TLS to each; secrets in the provider's secret store; S3 put/get/multipart/pre-signed/lifecycle on the real provider with synthetic files (a MinIO pass is not proof); backup and restore of MySQL and objects together; then migrate, deploy, health and smoke checks.
+Learn from nova-sg-all's NIPA setup (`platform/k8s` and its environment workflow there) for k3s, ingress and MySQL TLS, without copying its settings, namespaces or credentials. Verify separate UAT and production databases, buckets and Redis; TLS to each; secrets in the provider's secret store; S3 put/get/multipart/pre-signed/lifecycle on the real provider with synthetic files (a MinIO pass is not proof); backup and restore of MySQL and objects together; then migrate, deploy, health and smoke checks.

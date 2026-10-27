@@ -8,6 +8,7 @@ Nova Logistics is a planned multi-tenant SaaS for logistics companies in Thailan
 
 - **Stack (D-09):** Go modular monolith (`api`, `worker`, `migrate`), Next.js web with a driver PWA, MySQL 8.4, Redis as a cache, S3-compatible storage for documents and photos — [ADR-0001](docs/adr/0001-go-modular-monolith-and-nextjs.md) to [ADR-0005](docs/adr/0005-s3-object-storage.md).
 - **Local (D-10):** Docker for MinIO and Redis; the developer's existing host MySQL 8.4.
+- **Hosting (D-28):** NIPA Cloud in Thailand — k3s, managed MySQL 8.4 and S3 — as nova-sg-all uses.
 - **Repository (D-12):** its own repository, adopting nova-sg-all's conventions and porting its platform patterns ([ADR-0002](docs/adr/0002-separate-repository-adopting-sg-all-conventions.md)).
 - **Phases (D-02, D-03):** 1 core compliance and fleet (to May 2027, proposed); 2 check-in/out, scheduling, public API; 3 fuel, routes, orders, accounting/ERP adapters, then OMS and WMS.
 
@@ -16,7 +17,7 @@ Nova Logistics is a planned multi-tenant SaaS for logistics companies in Thailan
 | Document | Contents |
 | --- | --- |
 | [AGENTS.md](AGENTS.md) | Rules for every person and AI agent |
-| [01 Product and MVP](docs/01-product-and-mvp.md) | Segments, audiences, MVP-01 to MVP-24, journeys, pilot acceptance |
+| [01 Product and MVP](docs/01-product-and-mvp.md) | Segments, audiences, MVP-01 to MVP-25, journeys, pilot acceptance |
 | [02 Competitor and gap analysis](docs/02-competitor-gap-analysis.md) | 24 tools compared, prices, best practices, gaps, differentiation |
 | [03 Architecture](docs/03-architecture.md) | Modules, runtime, tenancy, files and ZIP, import/export, cache, integration boundary |
 | [04 Human and AI working agreement](docs/04-ai-development-workflow.md) | Roles, decision flow, feature loop, session protocol, status words, verification by risk |

@@ -9,7 +9,7 @@ flowchart TB
     subgraph Clients
         WEB[Office web - Next.js]
         PWA[Driver PWA - same Next.js app]
-        API3[Open API - Phase 2]
+        API3[Pilot read API - Phase 1; public API - Phase 2]
     end
     subgraph Backend[Go backend - one repository, one release]
         A[api command]
@@ -71,7 +71,7 @@ docs/
 | reports | Dashboards and report queries (read models) | 1 |
 | subscriptions | Plans, usage counts | 1 |
 | scheduling, attendance, leave | Shifts, check-in/out, leave (ported from nova-sg-all patterns) | 2 |
-| integrations | Public API, webhooks, partner credentials | 2 |
+| integrations | Pilot read API and API keys (Phase 1, D-29); public API writes, webhooks, partner credentials (Phase 2) | 1–2 |
 | orders, logistics, fuel, routing | Orders, trips, POD, fuel logs, route suggestions | 3 |
 
 A module owns its tables and is reached through its root-package interface. Cross-module references are IDs without foreign keys across module boundaries. `internal/archtest` enforces the rule.
@@ -82,7 +82,7 @@ A module owns its tables and is reached through its root-package interface. Cros
 | --- | --- | --- | --- |
 | MySQL | 8.4 LTS | Business state, audit, job queue, outbox, idempotency keys, file metadata | — |
 | Redis | 7.4 | Cache-aside for settings, UDA definitions, permissions, catalogues, dashboard counts; rate limits; OTP codes; job progress ([ADR-0004](adr/0004-redis-as-cache-only.md)) | Jobs, outbox, records, authority |
-| S3-compatible storage | MinIO locally; provider P-02 | Documents, photos, exports, ZIPs ([ADR-0005](adr/0005-s3-object-storage.md)) | Public links |
+| S3-compatible storage | MinIO locally; NIPA S3 in the cloud (D-28) | Documents, photos, exports, ZIPs ([ADR-0005](adr/0005-s3-object-storage.md)) | Public links |
 | Job queue | MySQL table with leases | Urgent lane (notifications, small jobs) and bulk lane (imports, ZIPs, exports, scans); per-tenant concurrency limit | — |
 
 Jobs and outbox rows are written in the same transaction as the business change. The worker claims with a lease, retries with backoff and records the outcome; a crashed worker's lease expires and another reclaims it.
@@ -116,7 +116,7 @@ Cache-aside with tenant-prefixed keys and a version in the key; TTL ≤ 10 minut
 ## Integration boundary
 
 - Every state change writes a domain event to the outbox (`driver.created`, `driver.status_changed`, `document.approved`, `document.expiring`, `document.expired`, `vehicle.assigned`, `inspection.failed`, …).
-- Internal API and the future public API (`/integrations/v1`, Phase 2) reuse the same application use cases; the public contract is versioned separately ([08](08-open-api-and-integrations.md)).
+- The internal API, the Phase 1 pilot read API (D-29) and the Phase 2 public API (`/integrations/v1`) reuse the same application use cases; the external contract is versioned separately ([08](08-open-api-and-integrations.md)).
 - Accounting and ERP are reached by adapters on events (Phase 3). Nova Logistics never keeps a general ledger (D-08).
 
 ## Data and policy rules
@@ -126,9 +126,9 @@ Cache-aside with tenant-prefixed keys and a version in the key; TTL ≤ 10 minut
 - Settings figures are copied onto records whose meaning they decide (e.g. the alert threshold that fired).
 - Protected fields (citizen ID, passport, bank account, criminal record) encrypted at field level with a key from the cloud KMS (local: a development key); a keyed hash supports duplicate checks without decrypting.
 
-## Deployment and recovery (proposed)
+## Deployment and recovery
 
-Cloud provider and runtime are open (P-02). Whatever is chosen: separate UAT and production databases, buckets and Redis; images built once and promoted; migrations as a one-shot job before rollout; daily database backup with point-in-time recovery; bucket versioning; a restore rehearsal before the pilot; health and smoke checks after each deploy.
+Cloud: NIPA Cloud in Thailand (D-28), the provider nova-sg-all already uses. API, worker and web run on k3s; NIPA managed MySQL 8.4; NIPA S3; Redis on k3s unless NIPA offers it managed. Proposed practice: separate UAT and production databases, buckets and Redis; images built once and promoted; migrations as a one-shot job before rollout; daily database backup with point-in-time recovery; bucket versioning; a restore rehearsal before the pilot; health and smoke checks after each deploy.
 
 ## Verification and extraction gates
 

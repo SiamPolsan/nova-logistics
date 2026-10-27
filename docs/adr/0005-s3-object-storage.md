@@ -1,6 +1,6 @@
 # ADR 0005: S3-Compatible Object Storage, MinIO Locally
 
-Status: **Accepted** 2026-10-28 (owner: "the document using s3", "minio for s3" locally, D-09, D-10). Cloud provider open: P-02.
+Status: **Accepted** 2026-10-28 (owner: "the document using s3", "minio for s3" locally, D-09, D-10). Cloud: NIPA S3 (D-28).
 Date: 2026-10-28
 Decision owner: Nova Logistics engineering owner
 Related: [architecture](../03-architecture.md#files-zip-and-the-document-browser), [environment workflow](../09-environment-workflow.md)
@@ -11,7 +11,7 @@ Documents (ID cards, licences, insurance policies, registration books), vehicle 
 
 ## Decision
 
-- One S3 adapter (aws-sdk-go-v2) used in every environment; only endpoint, region, credentials, path style and TLS change. Locally MinIO in Docker; in the cloud any S3-compatible service (AWS S3, GCS through its S3 interoperability API, NIPA S3), chosen in P-02.
+- One S3 adapter (aws-sdk-go-v2) used in every environment; only endpoint, region, credentials, path style and TLS change. Locally MinIO in Docker; in the cloud NIPA S3 (D-28). The adapter stays S3-generic, so another provider remains possible.
 - One private bucket per environment. Object key: `t/{tenant_id}/{module}/{yyyy}/{mm}/{object_id}`; the original file name lives only in MySQL metadata.
 - MySQL keeps the object metadata: tenant, owner record, key, size, MIME type sniffed from content, SHA-256, uploader, capture time, GPS (photos), retention class.
 - Browser and app upload straight to storage with a short-lived pre-signed PUT (multipart for files over 16 MB) after the API checks access and quota; the API confirms the upload by checking size and hash.

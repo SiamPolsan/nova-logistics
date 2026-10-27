@@ -41,7 +41,7 @@ The driver's primary key is a generated ID, never the citizen ID (SWP's design b
 | Group | Standard (* required) | Typical UDA |
 | --- | --- | --- |
 | Identity | plate*, plate province*, class* (2W, EV 2W, 3W, 4W pickup, van, 6W, 10W, trailer), body type, brand, model, year (CE stored), colour, VIN/chassis no, engine no, cc or motor kW, fuel/powertrain* | box size, wrap |
-| Ownership | ownership* (company, driver-owned, leased/rented, financed), owner name, owner ID (encrypted), lessor or financier, contract end, acquired on | monthly rental |
+| Ownership | ownership* (company-owned, driver-owned, leased/rented, financed or rent-to-own; all supported, D-26), owner name, owner ID (encrypted), lessor or financier, contract end, acquired on | monthly rental |
 | Operation | status*, home branch, current odometer (derived), payload kg and volume m³ (4W and up) | fleet card no |
 
 ## Default document types

@@ -23,7 +23,7 @@
 
 - Data subject requests (access, correction, deletion, objection): an export of a driver's data and a deletion workflow that keeps audit and legal-hold records.
 - Breach: PDPA requires notifying the PDPC within 72 hours of becoming aware, unless low risk; the runbook must name who decides and who notifies (tenant as controller, platform supports).
-- Cross-border transfer: hosting outside Thailand (e.g. GCP Singapore) needs the safeguards the PDPC requires; record the choice with P-02.
+- Hosting is NIPA Cloud in Thailand (D-28), so stored data stays in Thailand. Services outside Thailand that receive personal data (email delivery, LINE, AI document extraction) still need the PDPA's transfer safeguards and are listed as sub-processors.
 
 ## Retention
 

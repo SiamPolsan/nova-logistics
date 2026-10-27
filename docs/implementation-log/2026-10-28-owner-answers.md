@@ -16,6 +16,13 @@
 
 - Open questions: Q-06, Q-08, Q-14, Q-16, Q-18 (reworded); decisions P-01, P-02, P-07, P-12, P-18 before S1.
 
+## Second round (same day)
+
+- The owner answered the reworded questions: Q-06 all ownership types (D-26), Q-08 tenant-set inspection schedule (D-27), Q-14 NIPA Cloud in Thailand (D-28, answers P-02), Q-18 payroll reads from a Nova Logistics API plus exports (D-29); Q-16 skipped until before GA.
+- D-29 moves a read-only pilot API into Phase 1 (MVP-25, AC-P-08, sprint S9, BR-INT-01/02, [08](../08-open-api-and-integrations.md)).
+- Carried through 01, 03, 06, 08, 09, 10, 11, ADR-0005, business rules (BR-VEH-07), README and the feature list. P-17 key management now assumes NIPA.
+- Still open before S1: P-01, P-07, P-12, P-18; NIPA accounts and UAT resources.
+
 ## Deployment
 
 None.
