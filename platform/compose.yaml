@@ -1,0 +1,81 @@
+# Nova Logistics: local development services (D-10, docs/09-environment-workflow.md).
+#
+# MinIO (S3) and Redis only. MySQL 8.4 runs on the developer host and is
+# deliberately absent: stopping this stack or removing its volumes never resets
+# or repairs the database. The API, worker and web join under an "apps" profile
+# once the backend and web app exist.
+#
+#   docker compose --env-file platform/.env -f platform/compose.yaml up -d --wait
+#
+# Every port binds to loopback. Use synthetic files only.
+name: nova-logistics-local
+
+services:
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${NL_MINIO_ROOT_USER:?copy platform/.env.example to platform/.env}
+      MINIO_ROOT_PASSWORD: ${NL_MINIO_ROOT_PASSWORD:?copy platform/.env.example to platform/.env}
+    ports:
+      - "127.0.0.1:${NL_MINIO_API_PORT:-9000}:9000"
+      - "127.0.0.1:${NL_MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  # Creates the private development and test buckets and an application key
+  # that can reach only those two buckets, then exits. Safe to run again.
+  minio-init:
+    image: quay.io/minio/mc:RELEASE.2025-08-13T08-35-41Z
+    depends_on:
+      minio:
+        condition: service_healthy
+    restart: "no"
+    environment:
+      MINIO_ROOT_USER: ${NL_MINIO_ROOT_USER:?}
+      MINIO_ROOT_PASSWORD: ${NL_MINIO_ROOT_PASSWORD:?}
+      APP_KEY: ${NL_S3_ACCESS_KEY_ID:?}
+      APP_SECRET: ${NL_S3_SECRET_ACCESS_KEY:?}
+      DEV_BUCKET: ${NL_S3_BUCKET:?}
+      TEST_BUCKET: ${NL_TEST_S3_BUCKET:?}
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        mc alias set local http://minio:9000 "$$MINIO_ROOT_USER" "$$MINIO_ROOT_PASSWORD" >/dev/null
+        for bucket in "$$DEV_BUCKET" "$$TEST_BUCKET"; do
+          mc mb --ignore-existing "local/$$bucket"
+          mc anonymous set none "local/$$bucket"
+        done
+        printf '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":["s3:GetBucketLocation","s3:ListBucket","s3:ListBucketMultipartUploads"],"Resource":["arn:aws:s3:::%s","arn:aws:s3:::%s"]},{"Effect":"Allow","Action":["s3:GetObject","s3:PutObject","s3:DeleteObject","s3:AbortMultipartUpload","s3:ListMultipartUploadParts"],"Resource":["arn:aws:s3:::%s/*","arn:aws:s3:::%s/*"]}]}' \
+          "$$DEV_BUCKET" "$$TEST_BUCKET" "$$DEV_BUCKET" "$$TEST_BUCKET" > /tmp/nl-app-policy.json
+        mc admin user add local "$$APP_KEY" "$$APP_SECRET" >/dev/null
+        mc admin policy create local nl-app /tmp/nl-app-policy.json
+        # Attaching a policy that is already attached reports an error; the
+        # check below is what proves the application key works.
+        mc admin policy attach local nl-app --user "$$APP_KEY" >/dev/null 2>&1 || true
+        mc alias set app http://minio:9000 "$$APP_KEY" "$$APP_SECRET" >/dev/null
+        mc stat "app/$$DEV_BUCKET" >/dev/null
+        mc stat "app/$$TEST_BUCKET" >/dev/null
+        echo "buckets and application key are ready"
+
+  # Cache only (ADR-0004): nothing here is a record; losing it must be safe.
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--requirepass", "${NL_REDIS_PASSWORD:?copy platform/.env.example to platform/.env}", "--appendonly", "no", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "127.0.0.1:${NL_REDIS_PORT:-6379}:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    environment:
+      REDIS_PASSWORD: ${NL_REDIS_PASSWORD:?}
+
+volumes:
+  minio-data:

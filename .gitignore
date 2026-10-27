@@ -1,0 +1,30 @@
+# Local configuration and secrets: never commit these.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+service-account*.json
+*credentials*.json
+*token*.json
+
+# Build output and binaries.
+/backend/bin/
+/backend/tmp/
+*.exe
+*.test
+*.out
+node_modules/
+.next/
+out/
+coverage/
+
+# Editors and OS.
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Agent worktrees and scratch.
+.claude/worktrees/
+*.tmp
