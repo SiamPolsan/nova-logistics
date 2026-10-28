@@ -1,5 +1,7 @@
 # Nova Logistics
 
+> **Moved to nova-sg-all on 28 October 2026 (D-30).** The owner chose one platform. Logistics is now planned, and will be built, inside nova-sg-all as apps each company switches on, with rider and driver supply and transport as separate service lines: see nova-sg-all's D-158 and its `docs/15-logistics-service-line.md`. This repository stays as the record of the planning baseline below. Its decisions are inputs there; new planning happens in nova-sg-all.
+
 Nova Logistics is a planned multi-tenant SaaS for logistics companies in Thailand. Phase 1 serves sub-contractors that supply riders (2W) and drivers (4W) to retailers: rider and driver registration and records, documents with expiry alerts, vehicles (insurance, equipment, odometer, photos, inspection checklists, who drives what, owned vehicles) and fleet overview — worked like a spreadsheet, with Excel import/export, bulk edit, a bucket-style document browser and ZIP upload, and tenant-defined fields.
 
 **Planning baseline: 28 October 2026.** This repository holds planning documents and the local service definition only. There is no backend, web app, API, migration, CI or deployment yet. Reference companies: TTP (Thaitaweeporn: Big C, 2W and 4W) and SWP (Siwaporn Express: ALL Now, 2W), internal pilot tenants (D-15).

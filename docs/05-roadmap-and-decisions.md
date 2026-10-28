@@ -77,6 +77,7 @@ Assumed team: owner/PM, 2 Go engineers, 2 Next.js engineers, 1 QA, a part-time d
 | D-27 | Each tenant sets its own inspection schedule per vehicle class and ownership; the product ships defaults the tenant can change | 2026-10-28, owner answer to Q-08 (option 4) |
 | D-28 | Hosting is NIPA Cloud in Thailand: k3s for API, worker and web; NIPA managed MySQL 8.4; NIPA S3; Redis on k3s unless NIPA offers it managed. Answers P-02 | 2026-10-28, owner answer to Q-14 |
 | D-29 | During the pilot, TTP's and SWP's payroll systems read drivers, vehicles and assignments from a Nova Logistics API, and exports stay available. A read-only pilot API with API keys therefore moves into Phase 1 (MVP-25); the full public API stays in Phase 2 | 2026-10-28, owner answer to Q-18 |
+| D-30 | Logistics moves into nova-sg-all as one platform: rider and driver supply (sub-contract) and transport (owned logistics) become separate service lines there, each company switches on the apps it uses (as in Odoo), and one employee record serves every line. Recorded there as D-158 with the plan in its `docs/15-logistics-service-line.md`. Answers P-01 (option 3) and supersedes ADR-0002 and the separate-repository part of D-12; this repository stays as a record | 2026-10-28, owner: "by separate service line, but the employee might re-use the same module. so it can be select the tenant use which module (it odoo model)"; asked where the work lives, chose "One platform in nova-sg-all (Recommended)" |
 
 ## Decisions still needed
 
@@ -84,7 +85,7 @@ Working proposals let independent work continue; nothing that depends on them be
 
 | ID | Decision | Options | Working proposal | Needed before |
 | --- | --- | --- | --- | --- |
-| P-01 | Code relationship with nova-sg-all | 1. Port patterns, no shared code. 2. Shared Go platform module. 3. Build inside nova-sg-all | 1 now; review after GA (ADR-0002) | S1 |
+| P-01 | Code relationship with nova-sg-all | 1. Port patterns, no shared code. 2. Shared Go platform module. 3. Build inside nova-sg-all | **Answered by D-30:** 3, one platform inside nova-sg-all | — |
 | P-02 | Cloud and runtime | — | **Answered by D-28:** NIPA Cloud in Thailand | — |
 | P-03 | Tenancy enforcement | 1. Shared schema + app checks + negative tests. 2. Add DB views per tenant role | 1 (ADR-0003) | S1 |
 | P-04 | Driver app | 1. Next.js PWA. 2. Flutter app | 1 for Phase 1; decide native before Phase 2 (ADR-0008) | S1 spike |

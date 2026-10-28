@@ -8,6 +8,8 @@ These rules apply to this repository and to every person or AI agent working in 
 2. For implementation, read `docs/03-architecture.md`, `docs/04-ai-development-workflow.md`, the ADRs in `docs/adr/` and any instructions inside the affected subtree.
 3. Inspect the actual files, `git status`, `git log` and the available checks before editing. Fetch first: other people and agents push to this repository. Preserve changes made by the user or another agent.
 
+Moved (28 October 2026, D-30): new logistics planning and all code live in nova-sg-all (its D-158 and `docs/15-logistics-service-line.md`). Read this repository as the record of the planning baseline, and do not add new plans here.
+
 Current status (28 October 2026): planning documents and the local service definition (`platform/compose.yaml`: MinIO and Redis) only. There is no backend, web app, API contract, migration, CI, deployment or customer data. Do not claim runtime functionality, test coverage, infrastructure, stack versions, deployment or legal compliance exists because a plan describes it. Mark unresolved decisions and do not silently turn them into production commitments.
 
 ## Requirements and decisions

@@ -1,6 +1,6 @@
 # ADR 0002: Separate Repository Adopting nova-sg-all Conventions
 
-Status: **Accepted** 2026-10-28 (the owner created `SiamPolsan/nova-logistics` and asked that all planning live there, D-12). Whether code is later shared with nova-sg-all is open: P-01.
+Status: **Superseded** 2026-10-28 by D-30 (nova-sg-all D-158): the owner chose one platform inside nova-sg-all, P-01 option 3. It had been accepted earlier the same day (the owner created `SiamPolsan/nova-logistics` and asked that all planning live there, D-12).
 Date: 2026-10-28
 Decision owner: Nova Logistics product owner
 Related: [working agreement](../04-ai-development-workflow.md), [architecture](../03-architecture.md)
